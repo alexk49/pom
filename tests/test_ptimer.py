@@ -1,21 +1,21 @@
 import unittest
 
-from ptimer.ptimer import updateTime, convertTime, printTime
+from ptimer.ptimer import update_time, convert_time, print_time
 
 
 class TestTimer(unittest.TestCase):
-    def test_updateTime(self):
+    def test_update_time(self):
         t = 2
-        self.assertEqual(updateTime(t), 1)
+        self.assertEqual(update_time(t), 1)
 
-    def test_convertTime(self):
+    def test_convert_time(self):
         seconds = 65
-        self.assertEqual(convertTime(seconds), (1, 5))
+        self.assertEqual(convert_time(seconds), (1, 5))
 
-    def test_printTime(self):
+    def test_print_time(self):
         mins = 2
         secs = 40
-        self.assertEqual(printTime(mins, secs), "02:40")
+        self.assertEqual(print_time(mins, secs), "02:40")
 
 
 if __name__ == "__main__":
