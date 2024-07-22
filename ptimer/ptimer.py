@@ -32,7 +32,32 @@ def print_time(mins: int, secs: int) -> str:
     return timer
 
 
-def start_countdown(t):
+def convert_input_time(string_time: str) -> int:
+    """time passed as string like:
+    02:05
+    converted to seconds.
+    If time passed without colon from command line
+    will just return int value
+    >>> convert_input_time("02:00")
+    120
+    >>> convert_input_time("20")
+    20
+    """
+    if ":" not in string_time:
+        return int(string_time)
+    mins, secs = string_time.split(":")
+    t = (int(mins) * 60) + int(secs)
+    return t
+
+
+def start_countdown(t: str):
+    """Starts countdown of timer
+    arg is always given as string from command line
+    and from gui but is converted to int"""
+    print(t)
+
+    t = convert_input_time(t)
+
     while t != 0:
         mins, secs = convert_time(t)
         print_time(mins, secs)
@@ -41,8 +66,8 @@ def start_countdown(t):
 
 
 def main():
-    t = int(input("enter time in seconds: "))
-    run_countdown(t)
+    t = convert_input_time(input("enter time in seconds: "))
+    start_countdown(t)
 
 
 if __name__ == "__main__":
