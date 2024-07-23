@@ -2,7 +2,7 @@ import time
 from typing import Tuple
 from functools import partial
 
-from tkinter import Tk, Entry, StringVar
+from tkinter import Tk, Entry
 from tkinter import ttk
 
 
