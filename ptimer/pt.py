@@ -59,8 +59,7 @@ def start_countdown(timer_textbox: Entry, t: str):
     """Starts countdown of timer
     arg is always given as string from command line
     and from gui but is converted to int"""
-    print(t)
-
+    
     t = convert_input_time(t)
 
     while t >= 0:
