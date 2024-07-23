@@ -65,6 +65,10 @@ def start_countdown(t: str):
     print("finished!")
 
 
+def pause_countdown():
+    pass
+
+
 def main():
     t = convert_input_time(input("enter time in seconds: "))
     start_countdown(t)
