@@ -1,5 +1,10 @@
 import time
 from typing import Tuple
+from functools import partial
+
+from tkinter import Tk, Entry
+from tkinter import ttk
+
 
 def update_time(t: int) -> int:
     """deincrement time by 1 second
@@ -50,7 +55,7 @@ def convert_input_time(string_time: str) -> int:
     return t
 
 
-def start_countdown(t: str):
+def start_countdown(timer_textbox: Entry, t: str):
     """Starts countdown of timer
     arg is always given as string from command line
     and from gui but is converted to int"""
@@ -60,7 +65,8 @@ def start_countdown(t: str):
 
     while t != 0:
         mins, secs = convert_time(t)
-        print_time(mins, secs)
+        time_string = print_time(mins, secs)
+        update_timer_display(timer_textbox, time_string)
         t = update_time(t)
     print("finished!")
 
@@ -69,9 +75,39 @@ def pause_countdown(t):
     pass
 
 
+def update_timer_display(timer_textbox: Entry, t: str):
+    """takes time as string variable: 00:00
+    and sets timer textbox to given value"""
+    timer_textbox.insert(0, t)
+
+
+def set_timer(timer_textbox: Entry):
+    """gets time variable and passes it to start_countdown"""
+    t = timer_textbox.get()
+    start_countdown(timer_textbox, t)
+
+
+def set_pause(timer_textbox: Entry):
+    """gets time variable and passes it to pause_countdown"""
+    t = timer_textbox.get()
+    pause_countdown(t)
+
+
 def main():
-    t = convert_input_time(input("enter time in seconds: "))
-    start_countdown(t)
+    root = Tk()
+
+    frame = ttk.Frame(root, padding=40)
+    frame.grid()
+
+    timer_textbox = Entry(frame, width=10, borderwidth=5)
+    timer_textbox.grid(row=0, column=0, padx=10, pady=10)
+    timer_textbox.insert(0, "00:00")
+
+    ttk.Button(frame, text="Start", command=partial(set_timer, timer_textbox)).grid(column=0, row=1, padx=10)
+
+    ttk.Button(frame, text="Pause", command=partial(set_pause, timer_textbox)).grid(column=1, row=1, padx=10)
+
+    root.mainloop()
 
 
 if __name__ == "__main__":
