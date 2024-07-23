@@ -11,6 +11,12 @@ def set_timer(timer_textbox):
     t = timer_textbox.get()
     start_countdown(t)
 
+
+def set_pause(timer_textbox):
+    """gets time variable and passes it to pause_countdown"""
+    t = timer_textbox.get()
+    pause_countdown(t)
+
 def main():
     root = Tk()
 
@@ -23,7 +29,7 @@ def main():
 
     ttk.Button(frame, text="Start", command=partial(set_timer, timer_textbox)).grid(column=0, row=1, padx=10)
     
-    ttk.Button(frame, text="Pause", command=partial(pause_countdown, timer_textbox, timer_textbox)).grid(column=1, row=1, padx=10)
+    ttk.Button(frame, text="Pause", command=partial(set_pause, timer_textbox)).grid(column=1, row=1, padx=10)
     
     root.mainloop()
 

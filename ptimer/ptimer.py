@@ -65,7 +65,7 @@ def start_countdown(t: str):
     print("finished!")
 
 
-def pause_countdown():
+def pause_countdown(t):
     pass
 
 
