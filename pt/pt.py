@@ -2,9 +2,15 @@
 import time
 from typing import Tuple
 from functools import partial
+from threading import Event
 
 from tkinter import Tk, Entry
 from tkinter import ttk
+
+# global event handler
+# set when countdown is started
+# and cleared when countdown is paused
+PAUSE = Event()
 
 
 def update_time(t: int) -> int:
@@ -56,24 +62,37 @@ def convert_input_time(string_time: str) -> int:
     return t
 
 
-def start_countdown(timer_textbox: Entry, t: str):
-    """Starts countdown of timer
-    arg is always given as string from command line
-    and from gui but is converted to int"""
-    
-    t = convert_input_time(t)
+def start_countdown(timer_textbox: Entry, time_string: str):
+    """Starts countdown of timer and clears global Event handler.
+    arg can be given as string from command line
+    and from gui in form 00:00 but both are converted to int
+    """
+    PAUSE.clear()
 
-    while t >= 0:
+    t: int = convert_input_time(time_string)
+
+    while not PAUSE.is_set() and t >= 0:
         mins, secs = convert_time(t)
         time_string = print_time(mins, secs)
-        
+
         update_timer_display(timer_textbox, time_string)
 
         t = update_time(t)
 
+    # timer counts down to 0
+    # meaning it increments down to -1
+    if t == -1:
+        print("finished")
 
-def pause_countdown(t):
-    pass
+
+def pause_countdown(timer_textbox: Entry, time_string: str):
+    """Takes time as string in form: 00:00,
+    and pauses timer on given value
+
+    Updates global Event handler PAUSE which stops countdown
+    """
+    PAUSE.set()
+    update_timer_display(timer_textbox, time_string)
 
 
 def update_timer_display(timer_textbox: Entry, time_string: str):
@@ -87,8 +106,9 @@ def update_timer_display(timer_textbox: Entry, time_string: str):
 def set_timer(timer_textbox: Entry):
     """gets time variable and passes it to start_countdown
 
-    This is in separate function as you can't call a function
-    in the tkinter command"""
+    This is in separate function as you can't execute a function in the tkinter command.
+    And Entry.get() is required to get time value
+    """
     t = timer_textbox.get()
     start_countdown(timer_textbox, t)
 
@@ -96,10 +116,11 @@ def set_timer(timer_textbox: Entry):
 def set_pause(timer_textbox: Entry):
     """gets time variable and passes it to pause_countdown
     
-    This is in separate function as you can't call a function
-    in the tkinter command"""
+    This is in separate function as you can't execute a function in the tkinter command.
+    And Entry.get() is required to get time value.
+    """
     t = timer_textbox.get()
-    pause_countdown(t)
+    pause_countdown(timer_textbox, t)
 
 
 def main():
