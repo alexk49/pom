@@ -90,9 +90,14 @@ def pause_countdown(timer_textbox: Entry, time_string: str):
     and pauses timer on given value
 
     Updates global Event handler PAUSE which stops countdown
+
+    If PAUSE is already sets then works as toggle and restarts countdown
     """
-    PAUSE.set()
-    update_timer_display(timer_textbox, time_string)
+    if PAUSE.is_set():
+        start_countdown(timer_textbox, time_string)
+    else:
+        PAUSE.set()
+        update_timer_display(timer_textbox, time_string)
 
 
 def update_timer_display(timer_textbox: Entry, time_string: str):
