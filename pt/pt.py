@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import time
 from typing import Tuple
 from functools import partial
@@ -66,10 +67,7 @@ def start_countdown(timer_textbox: Entry, t: str):
         mins, secs = convert_time(t)
         time_string = print_time(mins, secs)
         
-        # update timer_textbox display
-        timer_textbox.delete(0, "end")
-        timer_textbox.insert(0, time_string)
-        timer_textbox.update()
+        update_timer_display(timer_textbox, time_string)
 
         t = update_time(t)
 
@@ -78,10 +76,12 @@ def pause_countdown(t):
     pass
 
 
-def update_timer_display(timer_textbox: Entry, t: str):
+def update_timer_display(timer_textbox: Entry, time_string: str):
     """takes time as string variable: 00:00
     and sets timer textbox to given value"""
-    pass
+    timer_textbox.delete(0, "end")
+    timer_textbox.insert(0, time_string)
+    timer_textbox.update()
 
 
 def set_timer(timer_textbox: Entry):
