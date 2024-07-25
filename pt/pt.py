@@ -31,7 +31,6 @@ def convert_time(t: int) -> Tuple[int, int]:
     mins, secs = divmod(t, 60)
     return mins, secs
 
-
 def print_time(mins: int, secs: int) -> str:
     """Print time to screen in format 00:00
     and also, returns string as variable
@@ -128,6 +127,17 @@ def set_pause(timer_textbox: Entry):
     pause_countdown(timer_textbox, t)
 
 
+def keyboard_shortcuts(event, timer_textbox: Entry):
+    """Handles all keyboard shortcuts"""
+    key = event.keysym
+    time_string = timer_textbox.get()
+    if PAUSE.is_set() and (key == "Return" or key == "space"):
+        start_countdown(timer_textbox, time_string)
+    elif not PAUSE.is_set() and (key == "Return" or key == "space"):
+        PAUSE.set()
+        update_timer_display(timer_textbox, time_string)
+
+
 def main():
     root = Tk()
 
@@ -141,6 +151,8 @@ def main():
     ttk.Button(frame, text="Start", command=partial(set_timer, timer_textbox)).grid(column=0, row=1, padx=10)
 
     ttk.Button(frame, text="Pause", command=partial(set_pause, timer_textbox)).grid(column=1, row=1, padx=10)
+ 
+    root.bind_all("<KeyPress>", lambda event: keyboard_shortcuts(event, timer_textbox=timer_textbox))
 
     root.mainloop()
 
