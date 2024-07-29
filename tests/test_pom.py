@@ -1,6 +1,6 @@
 import unittest
 
-from pom.pom import update_time, convert_time, print_time, convert_input_time
+from pom.pom import update_time, convert_time, print_time, convert_input_time, tool_exists
 
 
 class TestTimer(unittest.TestCase):
@@ -25,6 +25,8 @@ class TestTimer(unittest.TestCase):
         t_in_secs = 90
         self.assertEqual(convert_input_time(t), t_in_secs)
 
+    def test_tool_exists_false(self):
+        self.assertFalse(tool_exists("made_up_tool_that_couldnt_possibly_exist"))
 
 
 if __name__ == "__main__":
