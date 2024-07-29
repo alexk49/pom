@@ -19,6 +19,8 @@ PAUSE = Event()
 windows_sound_file_path = os.path.join("sounds", "bell.wav")
 linux_sound_file_path = os.path.join("sounds", "bell.mp3")
 
+LAST_INDEX = -1
+
 
 def update_time(t: int) -> int:
     """deincrement time by 1 second
@@ -144,6 +146,9 @@ def keyboard_shortcuts(event, timer_textbox: Entry, sound_on_finish: BooleanVar)
     elif not PAUSE.is_set() and (key == "Return" or key == "space"):
         PAUSE.set()
         update_timer_display(timer_textbox, time_string)
+    elif key.isdigit():
+        time_string = increment_display_value(key, time_string)
+        update_timer_display(timer_textbox, time_string)
 
 
 def tool_exists(name: str) -> bool:
@@ -182,10 +187,36 @@ def validate_timer_input(input_char: str, type_of_action: str, potential_display
 
         if not mins.isdigit() or not secs.isdigit() or len(mins) != 2 or len(secs) != 2:
             return False
+    
     # stop deletion of : char
     if type_of_action == '0' and input_char == ":":
         return False
     return True
+
+
+def increment_display_value(new_digit: str, display: str):
+    global LAST_INDEX
+    # stop reassignment of :
+    if LAST_INDEX == -3:
+        LAST_INDEX -= 1
+    # reassign to start if get to end of string
+    if LAST_INDEX == -6:
+        LAST_INDEX = -1
+    
+    dis = list(display)
+
+    # just update last char
+    if LAST_INDEX == -1:
+        dis[LAST_INDEX] = new_digit
+    else:
+        dis.pop(0)
+        dis.append(new_digit)
+        # reassign : to be central value
+        dis[1] = dis[2]
+        dis[2] = ":"
+    dis = ''.join(dis)
+    LAST_INDEX -= 1
+    return dis
 
 
 def main():
