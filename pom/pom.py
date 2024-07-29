@@ -197,11 +197,9 @@ def validate_timer_input(input_char: str, type_of_action: str, potential_display
 def increment_display_value(new_digit: str, display: str):
     global LAST_INDEX
     # stop reassignment of :
-    if LAST_INDEX == -3:
+    # and reassign to start if get to end of string
+    if LAST_INDEX == -3 or LAST_INDEX == -6:
         LAST_INDEX -= 1
-    # reassign to start if get to end of string
-    if LAST_INDEX == -6:
-        LAST_INDEX = -1
     
     dis = list(display)
 
