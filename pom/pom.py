@@ -16,7 +16,7 @@ from tkinter import ttk
 # and cleared when countdown is paused
 PAUSE = Event()
 
-sound_file_path = os.path.join("sounds", "bell.mp3")
+sound_file_path = os.path.join("sounds", "bell.wav")
 
 
 def update_time(t: int) -> int:
@@ -159,9 +159,7 @@ def playsound():
     else:
         import winsound
 
-        winsound.PlaySound(sound_file_path, winsound.SND_FILENAME)
-
-
+        winsound.PlaySound(sound_file_path, winsound.SND_FILENAME | winsound.SND_ASYNC)
 
 
 def main():
@@ -181,7 +179,7 @@ def main():
     ttk.Button(frame, text="Pause", command=partial(set_pause, timer_textbox, sound_on_finish)).grid(column=1, row=1, padx=10)
 
     ttk.Checkbutton(frame, text='Play sound', variable=sound_on_finish).grid(column=1, row=2, padx=20, pady=20)
-    
+
     root.bind_all("<KeyPress>", lambda event: keyboard_shortcuts(event, timer_textbox=timer_textbox, sound_on_finish=sound_on_finish))
 
     if PAUSE.set():
