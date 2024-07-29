@@ -1,6 +1,6 @@
 import unittest
 
-from pt.pt import update_time, convert_time, print_time, convert_input_time
+from pom.pom import update_time, convert_time, print_time, convert_input_time
 
 
 class TestTimer(unittest.TestCase):
