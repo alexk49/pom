@@ -178,7 +178,7 @@ def validate_timer_input(input_char: str, type_of_action: str, potential_display
     # %d = Type of action (1=insert, 0=delete, -1 for others)
     # %P = value of the entry if the edit is allowed
     """
-    if type_of_action == '1':  # input
+    if type_of_action == "1":  # input
         # input value should always match format 00:00
         values = potential_display.split(":")
         if len(values) > 2:
@@ -187,20 +187,32 @@ def validate_timer_input(input_char: str, type_of_action: str, potential_display
 
         if not mins.isdigit() or not secs.isdigit() or len(mins) != 2 or len(secs) != 2:
             return False
-    
+
     # stop deletion of : char
-    if type_of_action == '0' and input_char == ":":
+    if type_of_action == "0" and input_char == ":":
         return False
     return True
 
 
-def increment_display_value(new_digit: str, display: str):
+def increment_display_value(new_digit: str, display: str) -> str:
+    """Increments display when a digit is pressed.
+    >>> increment_display_value("5", "00:00")
+    '00:05'
+    >>> increment_display_value("4", "00:05")
+    '00:54'
+    >>> increment_display_value("3", "00:54")
+    '05:43'
+    >>> increment_display_value("2", "05:43")
+    '54:32'
+    """
     global LAST_INDEX
     # stop reassignment of :
-    # and reassign to start if get to end of string
-    if LAST_INDEX == -3 or LAST_INDEX == -6:
+    if LAST_INDEX == -3:
         LAST_INDEX -= 1
-    
+    # reassign to start if get to end of string
+    if LAST_INDEX == -6:
+        LAST_INDEX = -1
+
     dis = list(display)
 
     # just update last char
@@ -212,7 +224,7 @@ def increment_display_value(new_digit: str, display: str):
         # reassign : to be central value
         dis[1] = dis[2]
         dis[2] = ":"
-    dis = ''.join(dis)
+    dis = "".join(dis)
     LAST_INDEX -= 1
     return dis
 
@@ -226,17 +238,24 @@ def main():
     frame.grid()
 
     timer_textbox = Entry(frame, width=10, borderwidth=5, validate="key")
-    timer_textbox['validatecommand'] = (timer_textbox.register(validate_timer_input),'%S', '%d','%P')
+    timer_textbox["validatecommand"] = (timer_textbox.register(validate_timer_input), "%S", "%d", "%P")
     timer_textbox.grid(row=0, column=0, padx=10, pady=10)
     timer_textbox.insert(0, "00:00")
-    
-    ttk.Button(frame, text="Start", command=partial(set_timer, timer_textbox, sound_on_finish)).grid(column=0, row=1, padx=10)
 
-    ttk.Button(frame, text="Pause", command=partial(set_pause, timer_textbox, sound_on_finish)).grid(column=1, row=1, padx=10)
+    ttk.Button(frame, text="Start", command=partial(set_timer, timer_textbox, sound_on_finish)).grid(
+        column=0, row=1, padx=10
+    )
 
-    ttk.Checkbutton(frame, text='Play sound', variable=sound_on_finish).grid(column=1, row=2, padx=20, pady=20)
+    ttk.Button(frame, text="Pause", command=partial(set_pause, timer_textbox, sound_on_finish)).grid(
+        column=1, row=1, padx=10
+    )
 
-    root.bind_all("<KeyPress>", lambda event: keyboard_shortcuts(event, timer_textbox=timer_textbox, sound_on_finish=sound_on_finish))
+    ttk.Checkbutton(frame, text="Play sound", variable=sound_on_finish).grid(column=1, row=2, padx=20, pady=20)
+
+    root.bind_all(
+        "<KeyPress>",
+        lambda event: keyboard_shortcuts(event, timer_textbox=timer_textbox, sound_on_finish=sound_on_finish),
+    )
 
     if PAUSE.set():
         frame.focus()
