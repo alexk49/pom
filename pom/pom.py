@@ -16,7 +16,8 @@ from tkinter import ttk
 # and cleared when countdown is paused
 PAUSE = Event()
 
-sound_file_path = os.path.join("sounds", "bell.wav")
+windows_sound_file_path = os.path.join("sounds", "bell.wav")
+linux_sound_file_path = os.path.join("sounds", "bell.mp3")
 
 
 def update_time(t: int) -> int:
@@ -155,11 +156,11 @@ def playsound():
 
     If on a non windows system then mpg123 is required"""
     if platform.platform() != "Windows" and tool_exists("mpg123"):
-        Popen(["mpg123", sound_file_path])
+        Popen(["mpg123", linux_sound_file_path])
     else:
         import winsound
 
-        winsound.PlaySound(sound_file_path, winsound.SND_FILENAME | winsound.SND_ASYNC)
+        winsound.PlaySound(windows_sound_file_path, winsound.SND_FILENAME | winsound.SND_ASYNC)
 
 
 def main():
