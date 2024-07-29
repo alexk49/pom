@@ -163,6 +163,31 @@ def playsound():
         winsound.PlaySound(windows_sound_file_path, winsound.SND_FILENAME | winsound.SND_ASYNC)
 
 
+def validate_timer_input(input_char: str, type_of_action: str, potential_display: str):
+    """basic validation of timer input based on:
+
+    https://stackoverflow.com/questions/4140437/interactively-validating-entry-widget-content-in-tkinter#4140988
+
+    Tkinter passes in special values to function:
+    # %S = the text string being inserted or deleted, if any
+    # %d = Type of action (1=insert, 0=delete, -1 for others)
+    # %P = value of the entry if the edit is allowed
+    """
+    if type_of_action == '1':  # input
+        # input value should always match format 00:00
+        values = potential_display.split(":")
+        if len(values) > 2:
+            return False
+        mins, secs = values
+
+        if not mins.isdigit() or not secs.isdigit() or len(mins) != 2 or len(secs) != 2:
+            return False
+    # stop deletion of : char
+    if type_of_action == '0' and input_char == ":":
+        return False
+    return True
+
+
 def main():
     root = Tk()
 
@@ -171,10 +196,11 @@ def main():
     frame = ttk.Frame(root, padding=40)
     frame.grid()
 
-    timer_textbox = Entry(frame, width=10, borderwidth=5)
+    timer_textbox = Entry(frame, width=10, borderwidth=5, validate="key")
+    timer_textbox['validatecommand'] = (timer_textbox.register(validate_timer_input),'%S', '%d','%P')
     timer_textbox.grid(row=0, column=0, padx=10, pady=10)
     timer_textbox.insert(0, "00:00")
-
+    
     ttk.Button(frame, text="Start", command=partial(set_timer, timer_textbox, sound_on_finish)).grid(column=0, row=1, padx=10)
 
     ttk.Button(frame, text="Pause", command=partial(set_pause, timer_textbox, sound_on_finish)).grid(column=1, row=1, padx=10)
