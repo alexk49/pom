@@ -1,3 +1,3 @@
-# pt - Pomodoro Timer
+# pom - Pomodoro Timer
 
-Basic pomodoro timer app made with tkinter.
+Basic pomodoro timer app with CLI and GUI made with tkinter.
