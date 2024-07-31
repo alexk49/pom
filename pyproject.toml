@@ -4,3 +4,13 @@ requires-python = ">= 3.10"
 readme = "README.md"
 description = "Simple pomodoro timer: pom"
 license = {file = "LICENSE.txt"}
+
+[project.optional-dependencies]
+dev = [
+    "flake8 ~=7.1.0"
+    "black ~=24.4.2"
+    "mypy ~= 1.11.1"
+]
+
+[tool.black]
+line-length = 120
