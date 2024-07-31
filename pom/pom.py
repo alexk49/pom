@@ -7,18 +7,17 @@ from timers import Timer, TimerGUI
 
 def set_arg_parser():
     parser = argparse.ArgumentParser()
-
     parser.add_argument(
         "-t",
         "--time",
         type=str,
-        help="Pass time as string to set timer",
+        help="Pass time in format: mm:ss to set timer. If the time is passed as just a number, it will read as seconds.",
     )
     parser.add_argument(
         "-s",
         "--sound",
         action="store_true",
-        help="Switch for playing sound at end of timer",
+        help="Switch for playing sound at end of timer, this is set to off by default.",
     )
     return parser
 
