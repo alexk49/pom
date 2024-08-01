@@ -105,6 +105,28 @@ class Timer:
 
             winsound.PlaySound(self.windows_sound_file_path, winsound.SND_FILENAME | winsound.SND_ASYNC)
 
+    def pause_countdown(self):
+        if self.pause is True:
+            self.pause = False
+            self.start_countdown()
+        else:
+            self.pause = True
+
+
+class TimerCLI(Timer):
+    """Additional Class to provide keyboard listener
+    so Timer can be paused when run as CLI only."""
+    def __init__(self, time_string="00:00", sound_on_finish=False, *args, **kwargs):
+        super().__init__(time_string, sound_on_finish, *args, **kwargs)
+        
+        # works as mainloop
+        self.running = True
+
+    def key_listener(self):
+        """listens for Enter key"""
+        while self.running:
+            input()
+            self.pause_countdown()
 
 class TimerGUI(Timer):
     """Inherits from Timer and adds GUI"""
@@ -204,9 +226,3 @@ class TimerGUI(Timer):
         self.timer_textbox.insert(0, self.time_string)
         self.timer_textbox.update()
 
-    def pause_countdown(self):
-        if self.pause is True:
-            self.pause = False
-            self.start_countdown()
-        else:
-            self.pause = True

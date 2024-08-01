@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import argparse
+import threading
 from tkinter import Tk
 
-from timers import Timer, TimerGUI
+from timers import TimerGUI, TimerCLI
 
 
 def set_arg_parser():
@@ -40,9 +41,11 @@ def main():
     if args.time is None:
         run_gui()
     else:
-        timer = Timer(time_string=args.time, sound_on_finish=args.sound)
+        timer = TimerCLI(time_string=args.time, sound_on_finish=args.sound)
 
-        timer.start_countdown()
+        threading.Thread(target=timer.key_listener).start()
+
+        threading.Thread(target=timer.start_countdown).start()
 
 
 if __name__ == "__main__":
